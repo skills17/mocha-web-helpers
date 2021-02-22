@@ -26,8 +26,11 @@
     "import/extensions": ["error", {
       "d.ts": "always"
     }],
+    "import/no-extraneous-dependencies": ["off"],
+    "class-methods-use-this": ["off"],
     "no-useless-constructor": ["off"],
     "no-shadow": ["off"],
+    "no-plusplus": ["off"],
     "@typescript-eslint/no-shadow": ["error"],
     "@typescript-eslint/no-explicit-any": ["off"],
     "@typescript-eslint/explicit-module-boundary-types": ["off"]

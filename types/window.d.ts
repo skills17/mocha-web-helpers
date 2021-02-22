@@ -8,5 +8,7 @@ declare global {
     mocha: any;
     chai: any;
     expect: any;
+    before: (callback: () => void) => void;
+    after: (callback: () => void) => void;
   }
 }

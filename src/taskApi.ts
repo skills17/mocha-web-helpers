@@ -1,3 +1,5 @@
+import TaskConfig from '@skills17/task-config';
+
 export default class TaskApi {
   private config?: Record<string, unknown>;
 
@@ -35,5 +37,18 @@ export default class TaskApi {
     } catch (_) {
       return false;
     }
+  }
+
+  /**
+   * Returns the TaskConfig instance from the loaded configuration.
+   */
+  public getConfig(): TaskConfig {
+    if (!this.config) {
+      throw new Error('Configuration is not yet loaded');
+    }
+
+    const taskConfig = new TaskConfig();
+    taskConfig.load(this.config);
+    return taskConfig;
   }
 }
