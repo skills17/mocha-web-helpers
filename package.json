@@ -1,0 +1,34 @@
+{
+  "name": "@skills17/mocha-web-helpers",
+  "version": "0.1.0",
+  "description": "Provides some mocha web helpers for usage in a skills competition environment.",
+  "main": "dist/main.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "webpack",
+    "build:watch": "webpack --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skills17/mocha-web-helpers.git"
+  },
+  "author": "Cyril Wanner <info@cyr.li>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/skills17/mocha-web-helpers/issues"
+  },
+  "homepage": "https://github.com/skills17/mocha-web-helpers#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.12.17",
+    "@babel/core": "^7.12.17",
+    "@babel/preset-env": "^7.12.17",
+    "@babel/preset-typescript": "^7.12.17",
+    "babel-loader": "^8.2.2",
+    "typescript": "^4.1.5",
+    "webpack": "^5.23.0",
+    "webpack-cli": "^4.5.0"
+  }
+}
