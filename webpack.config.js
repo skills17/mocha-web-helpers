@@ -7,11 +7,14 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.ts$/,
         use: 'babel-loader',
         include: path.resolve(__dirname, 'src'),
       },
     ],
+  },
+  resolve: {
+    extensions: ['.ts', '.js'],
   },
   output: {
     filename: 'main.js',
