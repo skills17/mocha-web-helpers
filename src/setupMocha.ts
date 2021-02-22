@@ -1,3 +1,4 @@
+import reporter from './reporter';
 import TaskApi from './taskApi';
 
 type Options = {
@@ -105,7 +106,7 @@ class Mocha {
   private configureExpect(): void {
     // chai
     if (this.mochaAssets.find((asset) => asset.indexOf('chai') >= 0)) {
-      (window as any).expect = (window as any).chai.expect; // eslint-disable-line
+      window.expect = window.chai.expect; // eslint-disable-line
     }
   }
 
@@ -117,27 +118,25 @@ class Mocha {
     this.configureExpect();
 
     // mocha options
-    const mochaOptions = {
+    const mochaOptions: Record<string, unknown> = {
       ui: 'bdd',
       ...this.mochaOptions,
     };
 
     // if the task config api is available, use the custom reporter
     if (await this.taskApi.loadConfig()) {
-      // console.log('api available');
+      mochaOptions.reporter = reporter;
     }
 
-    const mocha = (window as any).mocha; // eslint-disable-line
-
     // setup mocha
-    mocha.setup(mochaOptions);
+    window.mocha.setup(mochaOptions);
 
     // inject all task files required for the tests
     await this.injectTestFiles();
 
     // run mocha
-    mocha.checkLeaks();
-    mocha.run();
+    window.mocha.checkLeaks();
+    window.mocha.run();
   }
 }
 
