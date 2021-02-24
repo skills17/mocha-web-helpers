@@ -11,7 +11,8 @@
     "build:watch": "webpack --stats minimal --watch",
     "lint": "tsc --noEmit && eslint . --ext .ts --ext .js --max-warnings 0",
     "lint:fix": "npm run lint -- --fix",
-    "test": "cypress run --project tests"
+    "test": "cypress run --project tests",
+    "test:watch": "cypress open --project tests"
   },
   "repository": {
     "type": "git",
