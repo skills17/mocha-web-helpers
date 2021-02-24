@@ -1,5 +1,6 @@
 import reporter from './reporter';
 import TaskApi from './taskApi';
+import styles from './styles';
 
 type Options = {
   api?: string;
@@ -38,6 +39,11 @@ class Mocha {
 
         document.head.appendChild(link);
       });
+
+    // inject custom styles
+    const stylesElement = document.createElement('style');
+    stylesElement.innerHTML = styles;
+    document.head.appendChild(stylesElement);
 
     // inject js
     const jsPromises = this.mochaAssets

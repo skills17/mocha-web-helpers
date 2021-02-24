@@ -1,5 +1,5 @@
 import TaskConfig from '@skills17/task-config';
-import { TestRun, Group } from '@skills17/test-result';
+import { TestRun, Group, Test } from '@skills17/test-result';
 
 export default (taskConfig: TaskConfig) =>
   class {
@@ -57,7 +57,7 @@ export default (taskConfig: TaskConfig) =>
       }
 
       const groupElement = this.getGroupElement(group);
-      this.updateGroupTests(group, groupElement, mochaTest);
+      this.updateGroup(group, groupElement, mochaTest);
     }
 
     /**
@@ -68,12 +68,16 @@ export default (taskConfig: TaskConfig) =>
     private recordTest(mochaTest: any): Group | false | undefined {
       const titlePath = mochaTest.titlePath();
 
-      return this.testRun?.recordTest(
-        titlePath.filter((title: string) => title !== 'extra' && title !== 'Extra').join(' > '),
-        mochaTest.title,
-        titlePath.includes('extra') || titlePath.includes('Extra'),
-        mochaTest.isPassed(),
-      );
+      try {
+        return this.testRun?.recordTest(
+          titlePath.filter((title: string) => title !== 'extra' && title !== 'Extra').join(' > '),
+          mochaTest.title,
+          titlePath.includes('extra') || titlePath.includes('Extra'),
+          mochaTest.isPassed(),
+        );
+      } catch (_) {
+        return false;
+      }
     }
 
     /**
@@ -103,39 +107,92 @@ export default (taskConfig: TaskConfig) =>
     }
 
     /**
-     * Updates all tests in the output of the specified group.
+     * Creates the test in the HTML report.
+     *
+     * @param testId Test id
+     * @param test Test instance
+     * @param mochaTest Mocha test instance
+     * @param groupElement HTML Element of the parent group
+     */
+    private createTestElement(
+      testId: number,
+      test: Test,
+      mochaTest: any,
+      groupElement: Element,
+    ): void {
+      // create successful test
+      if (test.isSuccessful()) {
+        const newTest = this.createFragment(
+          `<li class="test pass %e" data-test-id="%s"><h2>%e<span class="duration">%ems</span><a href="%s" class="replay">${this.playIcon}</a></h2></li>`,
+          mochaTest.speed,
+          testId,
+          test.getName(),
+          mochaTest.duration,
+          'url://todo',
+        );
+
+        groupElement.querySelector('ul')?.appendChild(newTest);
+
+        // create failed test
+      } else {
+        const newTest = this.createFragment(
+          `<li class="test fail" data-test-id="%s"><h2>%e<a href="%s" class="replay">${this.playIcon}</a></h2></li>`,
+          testId,
+          test.getName(),
+          'url://todo',
+        );
+
+        groupElement.querySelector('ul')?.appendChild(newTest);
+        const testElement = groupElement.querySelector(
+          `.test[data-test-id="${testId}"]`,
+        ) as Element;
+
+        // add the detailed test error
+        this.addTestError(testElement, mochaTest);
+      }
+    }
+
+    /**
+     * Updates the group as well as all tests in the output of the specified group.
      * If new tests were recorded, the necessary elements will be created.
      *
      * @param group Test group
      * @param element HTML element of the group
      * @param mochaTest Instance of a mocha test result
      */
-    private updateGroupTests(group: Group, element: Element, mochaTest: any): void {
+    private updateGroup(group: Group, element: Element, mochaTest: any): void {
       group.getTests().forEach((test, testId) => {
-        let testElement = element.querySelector(`.test[data-test-id="${testId}"]`);
+        const testElement = element.querySelector(`.test[data-test-id="${testId}"]`);
+        const pointsElement = element.querySelector('h1 .points');
 
         // create a new element if it doesn't exist yet
         if (!testElement) {
-          const newTest = this.createFragment(
-            `<li class="test ${
-              test.isSuccessful() ? 'pass' : 'fail'
-            } %e" data-test-id="%s"><h2>%e<span class="duration">%ems</span><a href="%s" class="replay">${
-              this.playIcon
-            }</a></h2></li>`,
-            mochaTest.speed,
-            testId,
-            test.getName(),
-            mochaTest.duration,
-            'url://todo',
-          );
+          this.createTestElement(testId, test, mochaTest, element);
+        }
 
-          element.querySelector('ul')?.appendChild(newTest);
-          testElement = element.querySelector(`.test[data-test-id="${testId}"]`) as Element;
+        // update points display
+        const points = `<span class="scored">${group.getPoints()}</span> / <span class="total">${group.getMaxPoints()}</span> point${
+          group.getMaxPoints() !== 1 ? 's' : ''
+        }`;
 
-          // for failures, add the detailed test error
-          if (!test.isSuccessful()) {
-            this.addTestError(testElement, mochaTest);
-          }
+        let pointsClass = '';
+        if (group.getPoints() >= group.getMaxPoints()) {
+          pointsClass = 'all-points';
+        } else if (group.getPoints() > 0) {
+          pointsClass = 'partial-points';
+        } else {
+          pointsClass = 'no-points';
+        }
+
+        if (pointsElement) {
+          pointsElement.innerHTML = points;
+          pointsElement.className = `points ${pointsClass}`;
+        } else {
+          element
+            .querySelector('h1')
+            ?.appendChild(
+              this.createFragment(`<span class="points ${pointsClass}">${points}</span>`),
+            );
         }
       });
     }
