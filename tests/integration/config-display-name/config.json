@@ -1,5 +1,5 @@
 {
-  "id": "config-minimal",
+  "id": "config-display-name",
   "serve": {
     "enabled": true,
     "mapping": {
@@ -13,16 +13,12 @@
       "match": "A.+"
     },
     {
-      "match": "B.+"
+      "match": "B.+",
+      "displayName": "BGroup::foo"
     },
     {
-      "match": "C.+"
-    },
-    {
-      "match": "D.+"
-    },
-    {
-      "match": "E.+"
+      "match": "C.+",
+      "displayName": "Last group"
     }
   ]
 }

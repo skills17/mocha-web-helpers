@@ -1,5 +1,5 @@
 {
-  "id": "config-minimal",
+  "id": "config-default-strategy",
   "serve": {
     "enabled": true,
     "mapping": {
@@ -8,21 +8,17 @@
       "/node_modules": "../../../node_modules"
     }
   },
+  "points": {
+    "strategy": "deduct"
+  },
   "groups": [
     {
-      "match": "A.+"
+      "match": "A.+",
+      "maxPoints": 2
     },
     {
-      "match": "B.+"
-    },
-    {
-      "match": "C.+"
-    },
-    {
-      "match": "D.+"
-    },
-    {
-      "match": "E.+"
+      "match": "B.+",
+      "strategy": "add"
     }
   ]
 }

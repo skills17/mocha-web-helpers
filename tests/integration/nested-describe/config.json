@@ -1,5 +1,5 @@
 {
-  "id": "config-minimal",
+  "id": "nested-describe",
   "serve": {
     "enabled": true,
     "mapping": {
@@ -10,19 +10,10 @@
   },
   "groups": [
     {
-      "match": "A.+"
+      "match": "A > B.+"
     },
     {
-      "match": "B.+"
-    },
-    {
-      "match": "C.+"
-    },
-    {
-      "match": "D.+"
-    },
-    {
-      "match": "E.+"
+      "match": ".+D.+"
     }
   ]
 }
