@@ -10,6 +10,10 @@ context('Config default strategy', () => {
     cy.task('integration:reset');
   });
 
+  it('Stats', () => {
+    cy.assertStats(4, 2);
+  });
+
   it('Group A', () => {
     cy.contains('A.+').parentsUntil('#mocha-report').should('be.visible');
     cy.contains('A.+')

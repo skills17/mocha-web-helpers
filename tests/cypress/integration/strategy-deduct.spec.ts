@@ -10,6 +10,10 @@ context('Strategy deduct', () => {
     cy.task('integration:reset');
   });
 
+  it('Stats', () => {
+    cy.assertStats(10, 8);
+  });
+
   it('Group A', () => {
     cy.contains('A.+').parentsUntil('#mocha-report').should('be.visible');
     cy.contains('A.+')

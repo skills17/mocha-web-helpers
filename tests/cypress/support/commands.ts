@@ -38,3 +38,9 @@ Cypress.Commands.add(
       .should('have.class', `${expectedClass}-points`);
   },
 );
+
+Cypress.Commands.add('assertStats', (passes: number, failures: number, percentage = 100) => {
+  cy.get('#mocha-stats .passes').should('have.text', `passes: ${passes}`);
+  cy.get('#mocha-stats .failures').should('have.text', `failures: ${failures}`);
+  cy.get('#mocha-stats .progress').should('have.attr', 'data-progress', percentage);
+});

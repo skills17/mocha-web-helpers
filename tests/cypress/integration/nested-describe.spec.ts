@@ -10,6 +10,10 @@ context('Nested describe', () => {
     cy.task('integration:reset');
   });
 
+  it('Stats', () => {
+    cy.assertStats(2, 0);
+  });
+
   it('Group A', () => {
     cy.contains('A > B.+').parentsUntil('#mocha-report').should('be.visible');
     cy.contains('A > B.+').parentsUntil('#mocha-report').assertTests({ Foo: true });

@@ -10,6 +10,10 @@ context('Config minimal', () => {
     cy.task('integration:reset');
   });
 
+  it('Stats', () => {
+    cy.assertStats(5, 4);
+  });
+
   it('Group A', () => {
     cy.contains('A.+').parentsUntil('#mocha-report').should('be.visible');
     cy.contains('A.+').parentsUntil('#mocha-report').assertTests({ Foo: true });

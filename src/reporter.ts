@@ -13,20 +13,26 @@ export default (taskConfig: TaskConfig) =>
 
     private htmlReporter: any;
 
+    private htmlRunner: any;
+
+    private htmlEvents: Record<string, (arg: any) => void> = {};
+
     private testRun?: TestRun;
 
-    constructor(runner: any, options: any) {
+    private stats: Record<string, number> = {};
+
+    constructor(private runner: any, options: any) {
       // call base reporter which registers some utility events on the runner
       window.mocha.Mocha.reporters.Base.call(this, runner, options);
 
       // extend from html reporter
-      const htmlEvents: Record<string, (arg: any) => void> = {};
-      const htmlRunner = {
+      this.htmlRunner = {
         on: (eventName: string, listener: (arg: any) => void) => {
-          htmlEvents[eventName] = listener;
+          this.htmlEvents[eventName] = listener;
         },
+        stats: this.stats,
       };
-      this.htmlReporter = new window.mocha.Mocha.reporters.HTML(htmlRunner, options);
+      this.htmlReporter = new window.mocha.Mocha.reporters.HTML(this.htmlRunner, options);
       this.report = document.getElementById('mocha-report') as HTMLElement;
 
       // create a new test run on the before all tests hook
@@ -42,6 +48,7 @@ export default (taskConfig: TaskConfig) =>
       // register mocha events
       runner.on(this.constants.EVENT_TEST_PASS, this.onTestFinished.bind(this));
       runner.on(this.constants.EVENT_TEST_FAIL, this.onTestFinished.bind(this));
+      runner.on(this.constants.EVENT_SUITE_END, this.onSuiteEnd.bind(this));
     }
 
     /**
@@ -58,6 +65,18 @@ export default (taskConfig: TaskConfig) =>
 
       const groupElement = this.getGroupElement(group);
       this.updateGroup(group, groupElement, mochaTest);
+      this.updateStats();
+    }
+
+    /**
+     * Update stats when suite has finished.
+     *
+     * @param suite Instance of a mocha test suite
+     */
+    private onSuiteEnd(suite: any): void {
+      if (suite.root) {
+        this.updateStats();
+      }
     }
 
     /**
@@ -268,5 +287,20 @@ export default (taskConfig: TaskConfig) =>
       });
 
       return div.firstChild as Node;
+    }
+
+    /**
+     * Update the stats.
+     */
+    private updateStats(): void {
+      this.htmlRunner.total = this.runner.total;
+
+      // the parent html reporter updates the stats on EVENT_SUITE_END called with root = true
+      this.htmlEvents[this.constants.EVENT_SUITE_END].bind(this.htmlReporter)({ root: true });
+
+      // update additional data attribute
+      (document.querySelector('#mocha-stats .progress') as HTMLElement).dataset.progress = `${
+        (this.stats.tests / this.runner.total) * 100
+      }`;
     }
   };
