@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Mocha Web Helpers - Integration Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<body>
+    <script src="/dist/main.js"></script>
+    <script>
+      skills17.setupMocha({
+        api: 'http://localhost:4500/extra-tests-strategy-deduct',
+        files: [
+          'tests/a.test.js',
+          'tests/b.test.js',
+          'tests/c.test.js',
+          'tests/d.test.js',
+          'tests/e.test.js',
+          'tests/f.test.js',
+          'tests/extra/a.test.js',
+          'tests/extra/b.test.js',
+          'tests/extra/c.test.js',
+          'tests/extra/d.test.js',
+          'tests/extra/e.test.js',
+          'tests/extra/f.test.js',
+        ],
+      });
+    </script>
+</body>
+</html>

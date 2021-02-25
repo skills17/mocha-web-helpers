@@ -112,7 +112,7 @@ export default (taskConfig: TaskConfig) =>
       // create the element if it doesn't exist yet
       if (!groupElement) {
         const newGroup = this.createFragment(
-          '<li class="suite" data-group-id="%s"><h1><a href="%s">%e</a></h1><ul></ul></li>',
+          '<li class="suite" data-group-id="%s"><h1><a href="%s">%e</a><span class="points"></span></h1><ul></ul></li>',
           groupId,
           'url://todo',
           group.getDisplayName(),
@@ -120,6 +120,15 @@ export default (taskConfig: TaskConfig) =>
 
         this.report?.appendChild(newGroup);
         groupElement = this.report?.querySelector(`.suite[data-group-id="${groupId}"]`) as Element;
+      }
+
+      // check if a manual check warning should be added
+      if (group.requiresManualCheck() && !groupElement.querySelector('.manual-check-warning')) {
+        groupElement
+          .querySelector('h1')
+          ?.appendChild(
+            this.createFragment('<span class="manual-check-warning">manual check required</span>'),
+          );
       }
 
       return groupElement;
@@ -138,37 +147,38 @@ export default (taskConfig: TaskConfig) =>
       test: Test,
       mochaTest: any,
       groupElement: Element,
-    ): void {
+    ): Element {
+      let testElement;
+
       // create successful test
       if (test.isSuccessful()) {
-        const newTest = this.createFragment(
+        testElement = this.createFragment(
           `<li class="test pass %e" data-test-id="%s"><h2>%e<span class="duration">%ems</span><a href="%s" class="replay">${this.playIcon}</a></h2></li>`,
           mochaTest.speed,
           testId,
           test.getName(),
           mochaTest.duration,
           'url://todo',
-        );
+        ) as Element;
 
-        groupElement.querySelector('ul')?.appendChild(newTest);
+        groupElement.querySelector('ul')?.appendChild(testElement);
 
         // create failed test
       } else {
-        const newTest = this.createFragment(
+        testElement = this.createFragment(
           `<li class="test fail" data-test-id="%s"><h2>%e<a href="%s" class="replay">${this.playIcon}</a></h2></li>`,
           testId,
           test.getName(),
           'url://todo',
-        );
-
-        groupElement.querySelector('ul')?.appendChild(newTest);
-        const testElement = groupElement.querySelector(
-          `.test[data-test-id="${testId}"]`,
         ) as Element;
+
+        groupElement.querySelector('ul')?.appendChild(testElement);
 
         // add the detailed test error
         this.addTestError(testElement, mochaTest);
       }
+
+      return testElement;
     }
 
     /**
@@ -181,12 +191,24 @@ export default (taskConfig: TaskConfig) =>
      */
     private updateGroup(group: Group, element: Element, mochaTest: any): void {
       group.getTests().forEach((test, testId) => {
-        const testElement = element.querySelector(`.test[data-test-id="${testId}"]`);
+        let testElement = element.querySelector(`.test[data-test-id="${testId}"]`);
         const pointsElement = element.querySelector('h1 .points');
 
         // create a new element if it doesn't exist yet
         if (!testElement) {
-          this.createTestElement(testId, test, mochaTest, element);
+          testElement = this.createTestElement(testId, test, mochaTest, element);
+        }
+
+        // update manual check warning
+        if (test.requiresManualCheck() && !testElement.classList.contains('manual-check')) {
+          testElement.classList.add('manual-check');
+          const beforeElement = testElement.querySelector('h2 a');
+          beforeElement?.parentNode?.insertBefore(
+            this.createFragment(
+              '<span class="manual-check-warning">please check manually for static return values and/or logical errors</span>',
+            ),
+            beforeElement,
+          );
         }
 
         // update points display
@@ -206,12 +228,6 @@ export default (taskConfig: TaskConfig) =>
         if (pointsElement) {
           pointsElement.innerHTML = points;
           pointsElement.className = `points ${pointsClass}`;
-        } else {
-          element
-            .querySelector('h1')
-            ?.appendChild(
-              this.createFragment(`<span class="points ${pointsClass}">${points}</span>`),
-            );
         }
       });
     }

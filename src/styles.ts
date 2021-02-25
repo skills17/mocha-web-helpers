@@ -1,5 +1,6 @@
 export default `
-.points {
+.points,
+.manual-check-warning {
   display: inline-block;
   margin-left: 14px;
   padding: 0 7px;
@@ -13,7 +14,12 @@ export default `
   transform: translateY(-3px);
 }
 
-.partial-points {
+.points:empty {
+  display: none;
+}
+
+.partial-points,
+.manual-check-warning {
   background: #fffbe6;
   border-color: #ffe58f;
   color: #d48806;
@@ -23,5 +29,18 @@ export default `
   background: #fff1f0;
   border-color: #ffa39e;
   color: #cf1322;
+}
+
+.manual-check-warning {
+  font-weight: 700;
+}
+
+.test .manual-check-warning {
+  transform: none;
+}
+
+#mocha .test.pass.manual-check::before {
+  content: '?';
+  color: #d48806;
 }
 `;
