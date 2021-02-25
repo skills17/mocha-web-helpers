@@ -83,3 +83,19 @@ Cypress.Commands.add('assertStats', (passes: number, failures: number, percentag
   cy.get('#mocha-stats .failures').should('have.text', `failures: ${failures}`);
   cy.get('#mocha-stats .progress').should('have.attr', 'data-progress', percentage);
 });
+
+Cypress.Commands.add('assertNoWarnings', () => {
+  cy.get('#mocha-report > li.warnings').should('not.exist');
+});
+
+Cypress.Commands.add('assertWarnings', (warnings: string[]) => {
+  cy.get('#mocha-report > li.warnings').should('be.visible');
+  cy.get('#mocha-report > li.warnings h1').should('have.text', 'Warnings:');
+
+  warnings.forEach((warning, i) => {
+    cy.get('#mocha-report > li.warnings ul li')
+      .eq(i)
+      .should('be.visible')
+      .should('have.text', warning);
+  });
+});

@@ -76,6 +76,7 @@ export default (taskConfig: TaskConfig) =>
     private onSuiteEnd(suite: any): void {
       if (suite.root) {
         this.updateStats();
+        this.displayWarnings();
       }
     }
 
@@ -318,5 +319,24 @@ export default (taskConfig: TaskConfig) =>
       (document.querySelector('#mocha-stats .progress') as HTMLElement).dataset.progress = `${
         (this.stats.tests / this.runner.total) * 100
       }`;
+    }
+
+    /**
+     * Display test warnings.
+     */
+    private displayWarnings(): void {
+      const warnings = this.testRun?.getWarnings();
+      if (warnings?.length === 0) {
+        return;
+      }
+
+      this.report.prepend(
+        this.createFragment(`<li class="warnings"><h1>Warnings:</h1><ul></ul></li>`),
+      );
+
+      const warningsList = this.report.querySelector('li.warnings ul');
+      warnings?.forEach((warning) => {
+        warningsList?.appendChild(this.createFragment('<li><pre>%e</pre></li>', warning));
+      });
     }
   };

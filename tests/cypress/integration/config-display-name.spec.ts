@@ -14,6 +14,10 @@ context('Config display name', () => {
     cy.assertStats(3, 0);
   });
 
+  it('Warnings', () => {
+    cy.assertNoWarnings();
+  });
+
   it('Group A', () => {
     cy.contains('A.+').parentsUntil('#mocha-report').should('be.visible');
     cy.contains('A.+').parentsUntil('#mocha-report').assertTests({ Foo: true });

@@ -1,0 +1,31 @@
+{
+  "id": "main-tests-missing",
+  "serve": {
+    "enabled": true,
+    "mapping": {
+      "/": "./",
+      "/dist": "../../../dist",
+      "/node_modules": "../../../node_modules"
+    }
+  },
+  "groups": [
+    {
+      "match": "A.+"
+    },
+    {
+      "match": "B.+"
+    },
+    {
+      "match": "C.+"
+    },
+    {
+      "match": "D.+"
+    },
+    {
+      "match": "E.+"
+    },
+    {
+      "match": "F.+"
+    }
+  ]
+}

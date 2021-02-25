@@ -14,6 +14,10 @@ context('Config default strategy', () => {
     cy.assertStats(4, 2);
   });
 
+  it('Warnings', () => {
+    cy.assertNoWarnings();
+  });
+
   it('Group A', () => {
     cy.contains('A.+').parentsUntil('#mocha-report').should('be.visible');
     cy.contains('A.+')

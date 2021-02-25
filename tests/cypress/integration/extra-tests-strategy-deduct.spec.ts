@@ -14,6 +14,10 @@ context('Extra tests strategy deduct', () => {
     cy.assertStats(27, 9);
   });
 
+  it('Warnings', () => {
+    cy.assertNoWarnings();
+  });
+
   it('Group A', () => {
     cy.contains('A.+').parentsUntil('#mocha-report').should('be.visible');
     cy.contains('A.+')

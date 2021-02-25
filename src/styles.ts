@@ -43,4 +43,22 @@ export default `
   content: '?';
   color: #d48806;
 }
+
+#mocha li.warnings {
+  padding: 15px;
+  background: #fffbe6;
+  border: 1px solid #ffe58f;
+  color: #d48806;
+}
+
+#mocha li.warnings h1 {
+  margin: 0;
+  font-weight: 700;
+}
+
+#mocha li.warnings pre {
+  margin-bottom: 0;
+  white-space: pre-wrap;
+  font-size: 16px;
+}
 `;

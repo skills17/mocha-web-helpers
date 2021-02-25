@@ -14,6 +14,10 @@ context('Extra tests fail', () => {
     cy.assertStats(14, 4);
   });
 
+  it('Warnings', () => {
+    cy.assertNoWarnings();
+  });
+
   it('Group A', () => {
     cy.contains('A.+').parentsUntil('#mocha-report').should('be.visible');
     cy.contains('A.+').parentsUntil('#mocha-report').assertTests({ Foo: true });

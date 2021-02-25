@@ -1,0 +1,22 @@
+{
+  "id": "empty-groups",
+  "serve": {
+    "enabled": true,
+    "mapping": {
+      "/": "./",
+      "/dist": "../../../dist",
+      "/node_modules": "../../../node_modules"
+    }
+  },
+  "groups": [
+    {
+      "match": "A.+"
+    },
+    {
+      "match": "B.+"
+    },
+    {
+      "match": "C.+"
+    }
+  ]
+}

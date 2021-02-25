@@ -14,6 +14,10 @@ context('Nested describe', () => {
     cy.assertStats(2, 0);
   });
 
+  it('Warnings', () => {
+    cy.assertNoWarnings();
+  });
+
   it('Group A', () => {
     cy.contains('A > B.+').parentsUntil('#mocha-report').should('be.visible');
     cy.contains('A > B.+').parentsUntil('#mocha-report').assertTests({ Foo: true });
