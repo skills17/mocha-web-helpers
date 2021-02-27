@@ -1,7 +1,11 @@
 Cypress.Commands.add(
   'assertTests',
   { prevSubject: true },
-  (subject, tests: Record<string, boolean | 'manual-check'>) => {
+  (
+    subject,
+    tests: Record<string, boolean | 'manual-check'>,
+    errors: Record<string, string> = {},
+  ) => {
     // check for each test
     Object.keys(tests).forEach((testName) => {
       const status = tests[testName];
@@ -46,7 +50,10 @@ Cypress.Commands.add(
           .parent()
           .find('.error')
           .should('be.visible')
-          .should('contain.text', 'AssertionError: expected true to equal false');
+          .should(
+            'contain.text',
+            errors[testName] || 'AssertionError: expected true to equal false',
+          );
       }
     });
 

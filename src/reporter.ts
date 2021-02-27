@@ -179,6 +179,9 @@ export default (taskConfig: TaskConfig) =>
         this.addTestError(testElement, mochaTest);
       }
 
+      // add code toggle
+      this.htmlReporter.addCodeToggle(testElement, mochaTest.body);
+
       return testElement;
     }
 
