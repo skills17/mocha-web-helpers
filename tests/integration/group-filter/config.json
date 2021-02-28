@@ -1,0 +1,20 @@
+{
+  "id": "group-filter",
+  "serve": {
+    "enabled": true,
+    "mapping": {
+      "/": "./",
+      "/dist": "../../../dist",
+      "/node_modules": "../../../node_modules"
+    }
+  },
+  "groups": [
+    {
+      "match": "A.+",
+      "displayName": "AandB"
+    },
+    {
+      "match": "B.+"
+    }
+  ]
+}

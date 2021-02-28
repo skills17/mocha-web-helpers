@@ -101,6 +101,24 @@ export default (taskConfig: TaskConfig) =>
     }
 
     /**
+     * Creates an url for the provided filter.
+     *
+     * @param grep Grep pattern to filter test
+     */
+    private createFilterUrl(grep: string, filter: 'group' | 'single'): string {
+      let { search } = window.location;
+
+      // remove previous grep query parameter if present
+      if (search) {
+        search = search.replace(/[?&]grep=[^&\s]*/g, '').replace(/^&/, '?');
+      }
+
+      return `${window.location.pathname + (search ? `${search}&` : '?')}grep=${encodeURIComponent(
+        grep,
+      )}&filter=${filter}`;
+    }
+
+    /**
      * Returns the HTML element of the specified group.
      * If it does not exist yet, the element will be created.
      *
@@ -115,7 +133,7 @@ export default (taskConfig: TaskConfig) =>
         const newGroup = this.createFragment(
           '<li class="suite" data-group-id="%s"><h1><a href="%s">%e</a><span class="points"></span></h1><ul></ul></li>',
           groupId,
-          'url://todo',
+          this.createFilterUrl(`^${group.getPattern()}`, 'group'),
           group.getDisplayName(),
         );
 
@@ -159,7 +177,7 @@ export default (taskConfig: TaskConfig) =>
           testId,
           test.getName(),
           mochaTest.duration,
-          'url://todo',
+          this.createFilterUrl(`^${mochaTest.fullTitle()}$`, 'single'),
         ) as Element;
 
         groupElement.querySelector('ul')?.appendChild(testElement);
@@ -170,7 +188,7 @@ export default (taskConfig: TaskConfig) =>
           `<li class="test fail" data-test-id="%s"><h2>%e<a href="%s" class="replay">${this.playIcon}</a></h2></li>`,
           testId,
           test.getName(),
-          'url://todo',
+          this.createFilterUrl(`^${mochaTest.fullTitle()}$`, 'single'),
         ) as Element;
 
         groupElement.querySelector('ul')?.appendChild(testElement);
@@ -216,22 +234,24 @@ export default (taskConfig: TaskConfig) =>
         }
 
         // update points display
-        const points = `<span class="scored">${group.getPoints()}</span> / <span class="total">${group.getMaxPoints()}</span> point${
-          group.getMaxPoints() !== 1 ? 's' : ''
-        }`;
+        if (!window.location.search.includes('&filter=single')) {
+          const points = `<span class="scored">${group.getPoints()}</span> / <span class="total">${group.getMaxPoints()}</span> point${
+            group.getMaxPoints() !== 1 ? 's' : ''
+          }`;
 
-        let pointsClass = '';
-        if (group.getPoints() >= group.getMaxPoints()) {
-          pointsClass = 'all-points';
-        } else if (group.getPoints() > 0) {
-          pointsClass = 'partial-points';
-        } else {
-          pointsClass = 'no-points';
-        }
+          let pointsClass = '';
+          if (group.getPoints() >= group.getMaxPoints()) {
+            pointsClass = 'all-points';
+          } else if (group.getPoints() > 0) {
+            pointsClass = 'partial-points';
+          } else {
+            pointsClass = 'no-points';
+          }
 
-        if (pointsElement) {
-          pointsElement.innerHTML = points;
-          pointsElement.className = `points ${pointsClass}`;
+          if (pointsElement) {
+            pointsElement.innerHTML = points;
+            pointsElement.className = `points ${pointsClass}`;
+          }
         }
       });
     }

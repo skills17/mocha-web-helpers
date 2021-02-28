@@ -31,7 +31,7 @@
     "@babel/preset-env": "^7.12.17",
     "@babel/preset-typescript": "^7.12.17",
     "@skills17/static-task-server": "^2.0.0",
-    "@skills17/task-config": "^2.1.0",
+    "@skills17/task-config": "^2.1.2",
     "@skills17/task-config-api": "^1.0.1",
     "@types/node": "^14.14.31",
     "@typescript-eslint/eslint-plugin": "^4.15.1",
