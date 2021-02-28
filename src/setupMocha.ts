@@ -135,7 +135,7 @@ class Mocha {
 
     // if the task config api is available, use the custom reporter
     if (await this.taskApi.loadConfig()) {
-      mochaOptions.reporter = reporter(this.taskApi.getConfig(), this.warnings);
+      mochaOptions.reporter = reporter(this.taskApi.getConfig(), this.taskApi, this.warnings);
     }
 
     // setup mocha

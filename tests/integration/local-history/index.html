@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Mocha Web Helpers - Integration Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<body>
+    <script src="/dist/main.js"></script>
+    <script>
+      skills17.setupMocha({
+        api: 'http://localhost:4500/local-history',
+        files: [
+          'tests/a.test.js',
+          'tests/b.test.js',
+        ],
+      });
+    </script>
+</body>
+</html>

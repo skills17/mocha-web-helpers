@@ -1,7 +1,8 @@
 import TaskConfig from '@skills17/task-config';
 import { TestRun, Group, Test } from '@skills17/test-result';
+import TaskApi from './taskApi';
 
-export default (taskConfig: TaskConfig, initialWarnings: string[]) =>
+export default (taskConfig: TaskConfig, taskApi: TaskApi, initialWarnings: string[]) =>
   class {
     private playIcon = '&#x2023;';
 
@@ -79,6 +80,10 @@ export default (taskConfig: TaskConfig, initialWarnings: string[]) =>
       if (suite.root) {
         this.updateStats();
         this.displayWarnings();
+
+        if (taskConfig.isLocalHistoryEnabled()) {
+          this.storeLocalHistory();
+        }
       }
     }
 
@@ -363,5 +368,14 @@ export default (taskConfig: TaskConfig, initialWarnings: string[]) =>
       warnings?.forEach((warning) => {
         warningsList?.appendChild(this.createFragment('<li><pre>%e</pre></li>', warning));
       });
+    }
+
+    /**
+     * Stores the run in the local history.
+     */
+    private storeLocalHistory(): void {
+      if (this.testRun) {
+        taskApi.storeLocalHistory(this.testRun);
+      }
     }
   };

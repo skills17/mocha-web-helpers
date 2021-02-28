@@ -1,4 +1,5 @@
 import TaskConfig from '@skills17/task-config';
+import { TestRun } from '@skills17/test-result';
 
 export default class TaskApi {
   private config?: Record<string, unknown>;
@@ -35,6 +36,31 @@ export default class TaskApi {
 
       return false;
     } catch (_) {
+      return false;
+    }
+  }
+
+  /**
+   * Stores the specified test run in the local history.
+   *
+   * @param testRun Test run to store
+   */
+  public async storeLocalHistory(testRun: TestRun): Promise<boolean> {
+    try {
+      const res = await fetch(`${this.url}/history`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(testRun),
+      });
+
+      const data = await res.json();
+
+      return data.created;
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e);
       return false;
     }
   }
