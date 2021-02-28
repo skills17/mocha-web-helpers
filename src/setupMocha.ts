@@ -11,6 +11,8 @@ type Options = {
 class Mocha {
   private taskApi: TaskApi;
 
+  private warnings: string[] = [];
+
   constructor(
     apiUrl: string,
     private mochaAssets: string[],
@@ -79,31 +81,33 @@ class Mocha {
    * Inject all test files.
    */
   private async injectTestFiles(): Promise<void> {
-    const promises = this.testFiles.map(
-      (testFile) =>
-        new Promise<void>((resolve, reject) => {
-          // fail after 3 seconds
-          const abortTimeout = setTimeout(
-            () => reject(new Error(`${testFile} did not load within 3 seconds`)),
-            3000,
-          );
+    // eslint-disable-next-line
+    for (const testFile of this.testFiles) {
+      // eslint-disable-next-line
+      await new Promise<void>((resolve, reject) => {
+        // fail after 3 seconds
+        const abortTimeout = setTimeout(() => {
+          console.error(`${testFile} did not load within 3 seconds`); // eslint-disable-line no-console
+          this.warnings.push(`${testFile} did not load within 3 seconds`);
+          resolve();
+        }, 3000);
 
-          const script = document.createElement('script');
-          script.addEventListener('load', () => {
-            clearTimeout(abortTimeout);
-            resolve();
-          });
-          script.addEventListener('error', (e) => {
-            clearTimeout(abortTimeout);
-            reject(e);
-          });
-          script.setAttribute('src', testFile);
+        const script = document.createElement('script');
+        script.addEventListener('load', () => {
+          clearTimeout(abortTimeout);
+          resolve();
+        });
+        script.addEventListener('error', () => {
+          clearTimeout(abortTimeout);
+          console.error(`${testFile} failed to load`); // eslint-disable-line no-console
+          this.warnings.push(`${testFile} failed to load`);
+          resolve();
+        });
+        script.setAttribute('src', testFile);
 
-          document.body.appendChild(script);
-        }),
-    );
-
-    await Promise.all(promises);
+        document.body.appendChild(script);
+      });
+    }
   }
 
   /**
@@ -131,7 +135,7 @@ class Mocha {
 
     // if the task config api is available, use the custom reporter
     if (await this.taskApi.loadConfig()) {
-      mochaOptions.reporter = reporter(this.taskApi.getConfig());
+      mochaOptions.reporter = reporter(this.taskApi.getConfig(), this.warnings);
     }
 
     // setup mocha

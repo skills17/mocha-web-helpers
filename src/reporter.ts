@@ -1,7 +1,7 @@
 import TaskConfig from '@skills17/task-config';
 import { TestRun, Group, Test } from '@skills17/test-result';
 
-export default (taskConfig: TaskConfig) =>
+export default (taskConfig: TaskConfig, initialWarnings: string[]) =>
   class {
     private playIcon = '&#x2023;';
 
@@ -20,6 +20,8 @@ export default (taskConfig: TaskConfig) =>
     private testRun?: TestRun;
 
     private stats: Record<string, number> = {};
+
+    private warnings = initialWarnings;
 
     constructor(private runner: any, options: any) {
       // call base reporter which registers some utility events on the runner
@@ -348,7 +350,7 @@ export default (taskConfig: TaskConfig) =>
      * Display test warnings.
      */
     private displayWarnings(): void {
-      const warnings = this.testRun?.getWarnings();
+      const warnings = [...this.warnings, ...(this.testRun?.getWarnings() || [])];
       if (warnings?.length === 0) {
         return;
       }
