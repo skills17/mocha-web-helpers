@@ -1,6 +1,6 @@
 {
   "name": "@skills17/mocha-web-helpers",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Provides some mocha web helpers for usage in a skills competition environment.",
   "main": "dist/main.js",
   "files": [
