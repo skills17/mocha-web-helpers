@@ -18,6 +18,10 @@ context('Config minimal', () => {
     cy.assertNoWarnings();
   });
 
+  it('Loader hidden', () => {
+    cy.get('.loader').should('not.exist');
+  });
+
   it('Group A', () => {
     cy.contains('A.+').parentsUntil('#mocha-report').should('be.visible');
     cy.contains('A.+').parentsUntil('#mocha-report').assertTests({ Foo: true });

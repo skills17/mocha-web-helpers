@@ -31,6 +31,11 @@ class Mocha {
     mochaDiv.id = 'mocha';
     document.body.prepend(mochaDiv);
 
+    // inject custom styles
+    const stylesElement = document.createElement('style');
+    stylesElement.innerHTML = styles;
+    document.head.appendChild(stylesElement);
+
     // inject css
     this.mochaAssets
       .filter((asset) => asset.endsWith('.css'))
@@ -41,11 +46,6 @@ class Mocha {
 
         document.head.appendChild(link);
       });
-
-    // inject custom styles
-    const stylesElement = document.createElement('style');
-    stylesElement.innerHTML = styles;
-    document.head.appendChild(stylesElement);
 
     // inject js
     const jsPromises = this.mochaAssets
@@ -124,6 +124,11 @@ class Mocha {
    * Setup mocha
    */
   public async setup(): Promise<void> {
+    // add loader
+    const loader = document.createElement('div');
+    loader.classList.add('loader');
+    document.body.appendChild(loader);
+
     await this.injectMocha();
     this.configureExpect();
 
@@ -143,6 +148,9 @@ class Mocha {
 
     // inject all task files required for the tests
     await this.injectTestFiles();
+
+    // remove loader
+    loader.remove();
 
     // run mocha
     window.mocha.checkLeaks();

@@ -20,6 +20,10 @@ context('API fallback', () => {
     cy.assertNoWarnings();
   });
 
+  it('Loader hidden', () => {
+    cy.get('.loader').should('not.exist');
+  });
+
   it('All groups', () => {
     cy.contains('AandB').should('not.exist');
     cy.contains('B.+').should('not.exist');
