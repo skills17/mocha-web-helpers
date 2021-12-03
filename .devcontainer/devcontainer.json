@@ -6,7 +6,8 @@
   "workspaceFolder": "/workspaces/mocha-web-helpers",
   "remoteUser": "node",
   "extensions": [
-    "dbaeumer.vscode-eslint"
+    "dbaeumer.vscode-eslint",
+    "redhat.vscode-yaml"
   ],
   "settings": {
     "editor.codeActionsOnSave": {

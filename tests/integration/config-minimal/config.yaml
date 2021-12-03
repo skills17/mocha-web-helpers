@@ -1,0 +1,14 @@
+# yaml-language-server: $schema=https://schema.skills17.ch/task-config/v3/config.schema.json
+id: config-minimal
+serve:
+  enabled: true
+  mapping:
+    /: ./
+    /dist: ../../../dist
+    /node_modules: ../../../node_modules
+groups:
+- match: A.+
+- match: B.+
+- match: C.+
+- match: D.+
+- match: E.+

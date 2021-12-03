@@ -4,27 +4,27 @@ import TaskApi from './taskApi';
 
 export default (taskConfig: TaskConfig, taskApi: TaskApi, initialWarnings: string[]) =>
   class {
-    private playIcon = '&#x2023;';
+    public playIcon = '&#x2023;';
 
-    private escape = window.mocha.Mocha.utils.escape;
+    public escape = window.mocha.Mocha.utils.escape;
 
-    private constants = window.mocha.Mocha.Runner.constants;
+    public constants = window.mocha.Mocha.Runner.constants;
 
-    private report: HTMLElement;
+    public report: HTMLElement;
 
-    private htmlReporter: any;
+    public htmlReporter: any;
 
-    private htmlRunner: any;
+    public htmlRunner: any;
 
-    private htmlEvents: Record<string, (arg: any) => void> = {};
+    public htmlEvents: Record<string, (arg: any) => void> = {};
 
-    private testRun?: TestRun;
+    public testRun?: TestRun;
 
-    private stats: Record<string, number> = {};
+    public stats: Record<string, number> = {};
 
-    private warnings = initialWarnings;
+    public warnings = initialWarnings;
 
-    constructor(private runner: any, options: any) {
+    constructor(public runner: any, options: any) {
       // call base reporter which registers some utility events on the runner
       window.mocha.Mocha.reporters.Base.call(this, runner, options);
 
@@ -59,7 +59,7 @@ export default (taskConfig: TaskConfig, taskApi: TaskApi, initialWarnings: strin
      *
      * @param mochaTest Instance of a mocha test result
      */
-    private onTestFinished(mochaTest: any): void {
+    public onTestFinished(mochaTest: any): void {
       const group = this.recordTest(mochaTest);
 
       if (!group) {
@@ -76,7 +76,7 @@ export default (taskConfig: TaskConfig, taskApi: TaskApi, initialWarnings: strin
      *
      * @param suite Instance of a mocha test suite
      */
-    private onSuiteEnd(suite: any): void {
+    public onSuiteEnd(suite: any): void {
       if (suite.root) {
         this.updateStats();
         this.displayWarnings();
@@ -92,7 +92,7 @@ export default (taskConfig: TaskConfig, taskApi: TaskApi, initialWarnings: strin
      *
      * @param test Instance of a mocha test result
      */
-    private recordTest(mochaTest: any): Group | false | undefined {
+    public recordTest(mochaTest: any): Group | false | undefined {
       const titlePath = mochaTest.titlePath();
 
       try {
@@ -112,7 +112,7 @@ export default (taskConfig: TaskConfig, taskApi: TaskApi, initialWarnings: strin
      *
      * @param grep Grep pattern to filter test
      */
-    private createFilterUrl(grep: string, filter: 'group' | 'single'): string {
+    public createFilterUrl(grep: string, filter: 'group' | 'single'): string {
       let { search } = window.location;
 
       // remove previous grep query parameter if present
@@ -131,7 +131,7 @@ export default (taskConfig: TaskConfig, taskApi: TaskApi, initialWarnings: strin
      *
      * @param group Test group
      */
-    private getGroupElement(group: Group): Element {
+    public getGroupElement(group: Group): Element {
       const groupId = this.testRun?.getGroups().indexOf(group);
       let groupElement = this.report?.querySelector(`.suite[data-group-id="${groupId}"]`);
 
@@ -168,7 +168,7 @@ export default (taskConfig: TaskConfig, taskApi: TaskApi, initialWarnings: strin
      * @param mochaTest Mocha test instance
      * @param groupElement HTML Element of the parent group
      */
-    private createTestElement(
+    public createTestElement(
       testId: number,
       test: Test,
       mochaTest: any,
@@ -218,7 +218,7 @@ export default (taskConfig: TaskConfig, taskApi: TaskApi, initialWarnings: strin
      * @param element HTML element of the group
      * @param mochaTest Instance of a mocha test result
      */
-    private updateGroup(group: Group, element: Element, mochaTest: any): void {
+    public updateGroup(group: Group, element: Element, mochaTest: any): void {
       group.getTests().forEach((test, testId) => {
         let testElement = element.querySelector(`.test[data-test-id="${testId}"]`);
         const pointsElement = element.querySelector('h1 .points');
@@ -269,7 +269,7 @@ export default (taskConfig: TaskConfig, taskApi: TaskApi, initialWarnings: strin
      * @param element HTML element of the test
      * @param mochaTest Instance of a mocha test result
      */
-    private addTestError(element: Element, mochaTest: any): void {
+    public addTestError(element: Element, mochaTest: any): void {
       let stackString;
       const message = mochaTest.err.toString();
 
@@ -318,7 +318,7 @@ export default (taskConfig: TaskConfig, taskApi: TaskApi, initialWarnings: strin
      * @param html HTML string
      * @param args Arguments
      */
-    private createFragment(html: string, ...args: any): Node {
+    public createFragment(html: string, ...args: any): Node {
       const div = document.createElement('div');
       let i = 0;
 
@@ -339,7 +339,7 @@ export default (taskConfig: TaskConfig, taskApi: TaskApi, initialWarnings: strin
     /**
      * Update the stats.
      */
-    private updateStats(): void {
+    public updateStats(): void {
       this.htmlRunner.total = this.runner.total;
 
       // the parent html reporter updates the stats on EVENT_SUITE_END called with root = true
@@ -354,7 +354,7 @@ export default (taskConfig: TaskConfig, taskApi: TaskApi, initialWarnings: strin
     /**
      * Display test warnings.
      */
-    private displayWarnings(): void {
+    public displayWarnings(): void {
       const warnings = [...this.warnings, ...(this.testRun?.getWarnings() || [])];
       if (warnings?.length === 0) {
         return;
@@ -373,7 +373,7 @@ export default (taskConfig: TaskConfig, taskApi: TaskApi, initialWarnings: strin
     /**
      * Stores the run in the local history.
      */
-    private storeLocalHistory(): void {
+    public storeLocalHistory(): void {
       if (this.testRun) {
         taskApi.storeLocalHistory(this.testRun);
       }

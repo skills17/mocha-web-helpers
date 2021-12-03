@@ -1,3 +1,4 @@
+/* eslint-disable import/no-import-module-exports */
 import path from 'path';
 import fs from 'fs';
 import rimraf from 'rimraf';
@@ -28,7 +29,7 @@ module.exports = (on) => {
 
       // load task config
       const config = new TaskConfig();
-      config.loadFromFileSync(path.resolve(taskPath, 'config.json'));
+      config.loadFromFileSync(path.resolve(taskPath, 'config.yaml'));
 
       // start static task server
       taskServer = new TaskServer(config);

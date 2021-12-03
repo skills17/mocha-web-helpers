@@ -31,22 +31,22 @@
     "@babel/plugin-proposal-class-properties": "^7.12.13",
     "@babel/preset-env": "^7.12.17",
     "@babel/preset-typescript": "^7.12.17",
-    "@skills17/static-task-server": "^2.0.0",
-    "@skills17/task-config": "^2.1.2",
-    "@skills17/task-config-api": "^1.0.1",
-    "@types/node": "^14.14.31",
+    "@skills17/static-task-server": "^3.0.0",
+    "@skills17/task-config": "^3.0.1",
+    "@skills17/task-config-api": "^2.0.0",
+    "@types/node": "^16.11.11",
     "@types/rimraf": "^3.0.0",
-    "@typescript-eslint/eslint-plugin": "^4.15.1",
-    "@typescript-eslint/parser": "^4.15.1",
+    "@typescript-eslint/eslint-plugin": "^5.5.0",
+    "@typescript-eslint/parser": "^5.5.0",
     "babel-loader": "^8.2.2",
     "chai": "^4.3.0",
-    "cypress": "^6.5.0",
-    "eslint": "^7.20.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-config-prettier": "^7.2.0",
+    "cypress": "^9.1.0",
+    "eslint": "^8.3.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-prettier": "^3.3.1",
-    "mocha": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "mocha": "^8.4.0",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
     "typescript": "^4.1.5",
@@ -54,6 +54,6 @@
     "webpack-cli": "^4.5.0"
   },
   "peerDependencies": {
-    "mocha": "^8.0.0"
+    "mocha": "^8.4.0"
   }
 }

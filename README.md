@@ -110,7 +110,7 @@ The available options can be seen on the website of [mocha](https://mochajs.org/
 
 A core concept is test groups. You usually don't want to test everything for one criterion in one test function but instead split it into multiple ones for a cleaner test class and a better overview.
 
-In JS, tests are grouped by a test name prefix defined in the `config.json` file.
+In JS, tests are grouped by a test name prefix defined in the `config.yaml` file.
 
 All `describe`s are concatenated with the actual test names before evaluation.
 
